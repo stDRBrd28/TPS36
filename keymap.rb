@@ -143,6 +143,7 @@ mouse.task do |mouse, keyboard|
     # LEFT: 0b001, RIGHT: 0b010
     button = 0
     # nof = 1
+    puts nof.class
     if nof == 1 then
       if event & 0b0000001100000000 > 0 then
         button = 0b001
@@ -156,16 +157,16 @@ mouse.task do |mouse, keyboard|
         button = 0b010
       elsif (event & 0b0000000000000010 > 0 )
         # Works as a scroll wheel
-        USB.merge_mouse_report(button, 0, 0, ref_x[0], -ref_y[0])
+        USB.merge_mouse_report(button, 0, 0, ref_x[0], ref_y[0])
       elsif (event & 0b0000000000000100 > 0 )
-        USB.merge_mouse_report(button, 0, 0, ref_x[0], -ref_y[0])
+        USB.merge_mouse_report(button, 0, 0, ref_x[0], ref_y[0])
       end
     elsif nof == 3
       if (event & 0b0000000000000010 > 0 ) then
         # Works as a scroll wheel
-        USB.merge_mouse_report(button, 0, 0, ref_x[0], -ref_y[0])
+        USB.merge_mouse_report(button, 0, 0, ref_x[0]/2.0, -ref_y[0]/2.0)
       elsif (event & 0b0000000000000100 > 0 )
-        USB.merge_mouse_report(button, 0, 0, ref_x[0], -ref_y[0])
+        USB.merge_mouse_report(button, 0, 0, ref_x[0]/2.0, -ref_y[0]/2.0)
       end
     elsif nof == 4
       if (event & 0b0000000000000010 > 0 ) then
@@ -202,32 +203,33 @@ kbd.add_layer :default, %i[
   KC_Q    KC_W    KC_E       KC_R   KC_T     KC_Y     KC_U   KC_I       KC_O     KC_P
   KC_A    KC_S    KC_D       KC_F   KC_G     KC_H     KC_J   KC_K       KC_L     KC_SCOLON
   KC_Z    KC_X    KC_C       KC_V   KC_B     KC_N     KC_M   KC_COMMA   KC_DOT   KC_SLASH
-  KC_LSFT KC_LCTL LOWER_SPC  RAISE  KC_BTN1  KC_BTN2  LOWER  RAISE_ENT  KC_BSPC  KC_RALT
-]
-kbd.add_layer :raise, %i[
-  KC_KP_PLUS   KC_7  KC_8   KC_9  KC_KP_SLASH     KC_RPRN   KC_CIRC   KC_AMPR  KC_ASTER  KC_LPRN
-  KC_KP_MINUS  KC_4  KC_5   KC_6  KC_KP_ASTERISK  KC_UNDS   KC_DEL    KC_UP    KC_UP     KC_RIGHT
-  KC_0         KC_1  KC_2   KC_3  KC_KP_ENTER     KC_SLASH  KC_LEFT   KC_DOWN  KC_RIGHT  KC_DOT
-  KC_LSFT      KC_LCTL  FUNC_SPC  RAISE    KC_BTN1         KC_BTN2   FUNC      RAISE_ENT  KC_BSPC  KC_RALT
+  KC_LCTL KC_LSFT LOWER_SPC  RAISE  KC_BTN1  KC_BTN2  LOWER  RAISE_ENT  KC_BSPC  KC_RALT
 ]
 kbd.add_layer :lower, %i[
-  KC_RPRN   KC_CIRC  KC_AMPR    KC_ASTER  KC_LPRN   KC_KP_PLUS   KC_7  KC_8   KC_9  KC_KP_SLASH
-  KC_UNDS   KC_DEL   KC_UP      KC_UP     KC_RIGHT  KC_KP_MINUS  KC_4  KC_5   KC_6  KC_KP_ASTERISK
-  KC_SLASH  KC_LEFT  KC_DOWN    KC_RIGHT  KC_DOT    KC_0         KC_1  KC_2   KC_3  KC_KP_ENTER
-  KC_LSFT   KC_LCTL  LOWER_SPC  FUNC      KC_BTN1   KC_BTN2      LOWER    FUNC_ENT  KC_BSPC  KC_RALT
+  KC_1   KC_2  KC_3   KC_4  KC_5     KC_6   KC_7   KC_8  KC_9  KC_0
+  KC_TAB  IME  KC_ZKHK    KC_NONUS_HASH  KC_LBRC  KC_RBRC   KC_MINUS  KC_EQUAL  KC_UNDS  KC_BSLASH
+  KC_F1  KC_F2  KC_F3   KC_F4  KC_F5     KC_F6  KC_F7   KC_F8  KC_F9  KC_F10
+  KC_LCTL KC_LSFT  LOWER_SPC   FUNC    KC_BTN1         KC_BTN2   LOWER   FUNC_ENT     KC_BSPC  KC_RALT
+]
+kbd.add_layer :raise, %i[
+  KC_KP_PLUS   KC_7  KC_8   KC_9  KC_KP_SLASH       KC_RPRN   KC_CIRC  KC_AMPR    KC_ASTER  KC_LPRN
+  KC_KP_MINUS  KC_4  KC_5   KC_6  KC_KP_ASTERISK    KC_UNDS   KC_DEL   KC_UP      KC_UP     KC_RIGHT
+  KC_0         KC_1  KC_2   KC_3  KC_KP_ENTER       KC_SLASH  KC_LEFT  KC_DOWN    KC_RIGHT  KC_DOT
+  KC_LCTL KC_LSFT  FUNC_SPC  RAISE     KC_BTN1   KC_BTN2   FUNC      RAISE_ENT   KC_BSPC  KC_RALT
 ]
 kbd.add_layer :func, %i[
   KC_F14  KC_F7   KC_F8     KC_F9  KC_F17   KC_F17   KC_F7  KC_F8     KC_F9    KC_F14
   KC_F13  KC_F4   KC_F5     KC_F6  KC_F16   KC_F16   KC_F4  KC_F5     KC_F6    KC_F13
-  KC_F12  KC_F1   KC_F2     KC_F3  KC_INT1  KC_INT2  KC_F1  KC_F2     KC_F3    KC_F12
+  KC_F12  KC_F1   KC_F2     KC_F3  KC_INT1  HELP  KC_F1  KC_F2     KC_F3    KC_F12
   RGB_TOG KC_RGUI FUNC_SPC  FUNC   KC_BTN1  KC_BTN2  FUNC   FUNC_ENT  KC_RGUI  RGB_TOG
 ]
 
-kbd.define_composite_key :IME, %i(KC_LALT KC_LCTL KC_DEL)
-kbd.define_mode_key :RAISE_ENT, [ :KC_ENTER, :raise, 150, 150 ]
-kbd.define_mode_key :LOWER_SPC, [ :KC_SPACE, :lower, 150, 150 ]
-kbd.define_mode_key :FUNC_ENT, [ :KC_ENTER, :func, 150, 150 ]
-kbd.define_mode_key :FUNC_SPC, [ :KC_SPACE, :func, 150, 150 ]
+kbd.define_composite_key :HELP, %i(KC_LALT KC_LCTL KC_DEL)
+kbd.define_composite_key :IME, %i(KC_LGUI KC_SPC)
+kbd.define_mode_key :RAISE_ENT, [ :KC_ENTER, :raise, 300, 300 ]
+kbd.define_mode_key :LOWER_SPC, [ :KC_SPACE, :lower, 300, 300 ]
+kbd.define_mode_key :FUNC_ENT, [ :KC_ENTER, :func, 300, 300 ]
+kbd.define_mode_key :FUNC_SPC, [ :KC_SPACE, :func, 300, 300 ]
 kbd.define_mode_key :RAISE, [ nil, :raise, nil, nil ]
 kbd.define_mode_key :LOWER, [ nil, :lower, nil, nil ]
 kbd.define_mode_key :FUNC, [ nil, :func, nil, nil ]
