@@ -1,6 +1,7 @@
 require "consumer_key"
 require "ssd1306"
 require "tps65"
+require "logo"
 
 kbd = Keyboard.new
 
@@ -20,7 +21,7 @@ kbd.append TPS65.new(unit_name: :RP2040_I2C0, freq: 100 * 1000, sda: 12, scl: 13
 
 OLED = SSD1306.new(unit_name: :RP2040_I2C1, freq: 100 * 1000, sda: 6, scl: 7)
 OLED.all_clear()
-OLED.all_white()
+OLED.draw_all(pic: $logo)
 
 r0, r1, r2, r3 = 14, 8, 9, 10
 c0, c1, c2, c3, c4, c5, c6, c7, c8, c9 = 15, 26, 27, 28, 29, 4, 3, 2, 1, 0

@@ -23,42 +23,18 @@ class SSD1306
         @i2c.write(0x3C, [0b00000000, 0x22, 0x00, 0x07])
         @i2c.write(0x3C, [0b00000000, 0x8D, 0x14])
         @i2c.write(0x3C, [0b10000000, 0xAF])
-
-
-        i=0
-        while i<8 do
-            @i2c.write(0x3C, [0b10000000,
-                            0xB0 | i,
-                            0x21,
-                            0x00 | 0,
-                            0x7F])
-
-          j=0
-          while j<128 do
-            @i2c.write(0x3C, [0x00, 0x21, 0x00 | j, 0x00 | j+1])
-            @i2c.write(0x3C, [0b01000000,
-                            0xFF])
-            j=j+1
-          end
-          i=i+1
-        end
-        return @i2c
     end
 
     def all_clear()
         i=0
         while i<8 do
             @i2c.write(0x3C, [0b10000000,
-                            0xB0 | i,
-                            0x21,
-                            0x00 | 0,
-                            0x7F])
+                              0xB0 | i])
 
           j=0
           while j<128 do
             @i2c.write(0x3C, [0x00, 0x21, 0x00 | j, 0x00 | j+1])
-            @i2c.write(0x3C, [0b01000000,
-                            0x00])
+            @i2c.write(0x3C, [0b01000000, 0x55])
             j=j+1
           end
           i=i+1
@@ -68,28 +44,34 @@ class SSD1306
     def all_white()
         i=0
         while i<8 do
-            @i2c.write(0x3C, [0b10000000,
-                            0xB0 | i,
-                            0x21,
-                            0x00 | 0,
-                            0x7F])
+          @i2c.write(0x3C, [0b10000000,
+                            0xB0 | i])
 
           j=0
           while j<128 do
             @i2c.write(0x3C, [0x00, 0x21, 0x00 | j, 0x00 | j+1])
-            @i2c.write(0x3C, [0b01000000,
-                            0xFF])
+            @i2c.write(0x3C, [0b01000000, 0xFF])
             j=j+1
           end
           i=i+1
         end
     end
 
-    def write_string(str, font, size)
+    # def write_string(str, font, size)
+    # end
+
+    def draw_all(pic:)
+        k=0
+        while k<128*8 do
+            i = k / 128
+            j = k-i*128
+
+            @i2c.write(0x3C, [0b10000000,
+                              0xB0 | i])
+
+            @i2c.write(0x3C, [0x00, 0x21, 0x00 | j, 0x00 | j+1])
+            @i2c.write(0x3C, [0b01000000, pic[k].bytes[0]])
+            k=k+1
+        end
     end
-
-    # def draw(pic)
-    #     for k = 0 .. pic.length - 1
-    #         k 
-
 end
