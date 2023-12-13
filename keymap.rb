@@ -11,13 +11,15 @@ rgb = RGB.new(
   40, # size of underglow pixel
   20   # size of backlight pixel
 )
-rgb.effect = :breath
+rgb.effect = :swirl
 rgb.hue = 0
 rgb.speed = 25
 kbd.append rgb
 kbd.send_key :RGB_TOG
 
-kbd.append TPS65.new(unit_name: :RP2040_I2C0, freq: 100 * 1000, sda: 12, scl: 13)
+# tps65 = TPS65.new(unit_name: :RP2040_I2C0,
+#                   freq: 100 * 1000, sda: 12, scl: 13)
+# kbd.append tps65.mouse
 
 OLED = SSD1306.new(unit_name: :RP2040_I2C1, freq: 100 * 1000, sda: 6, scl: 7)
 OLED.all_clear()
